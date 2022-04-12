@@ -1,12 +1,13 @@
 import * as mediasoup from 'mediasoup';
 import { config } from '../config';
+import { MediasoupRouterOptions } from '../router';
 
-export const createRouter = async () => {
+export const createRouter = async (options: MediasoupRouterOptions) => {
   const worker = await mediasoup.createWorker({
-    logLevel: config.mediasoup.worker.logLevel,
+    logLevel: options.logLevel || config.mediasoup.worker.logLevel,
     logTags: config.mediasoup.worker.logTags,
-    rtcMinPort: config.mediasoup.worker.rtcMinPort,
-    rtcMaxPort: config.mediasoup.worker.rtcMaxPort,
+    rtcMinPort: options.rtcMinPort || config.mediasoup.worker.rtcMinPort,
+    rtcMaxPort: options.rtcMaxPort || config.mediasoup.worker.rtcMaxPort,
   });
 
   worker.on('died', () => {

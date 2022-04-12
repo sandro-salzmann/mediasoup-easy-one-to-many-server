@@ -1,6 +1,6 @@
 import { RtpCodecCapability } from 'mediasoup/node/lib/RtpParameters';
 import { TransportListenIp } from 'mediasoup/node/lib/Transport';
-import { WorkerLogTag } from 'mediasoup/node/lib/Worker';
+import { WorkerLogLevel, WorkerLogTag } from 'mediasoup/node/lib/Worker';
 import os from 'os';
 
 export const config = {
@@ -11,7 +11,7 @@ export const config = {
     worker: {
       rtcMinPort: 10000,
       rtcMaxPort: 10100,
-      logLevel: 'debug',
+      logLevel: 'debug' as WorkerLogLevel,
       logTags: ['info', 'ice', 'dtls', 'rtp', 'srtp', 'rtcp'] as WorkerLogTag[],
     },
   },
@@ -43,4 +43,4 @@ export const config = {
     maxIncomeBitrate: 3500000,
     initialAvailableOutgoingBitrate: 1000000,
   },
-} as const;
+};

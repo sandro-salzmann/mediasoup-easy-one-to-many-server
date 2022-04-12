@@ -7,26 +7,41 @@ import {
   RtpCapabilities,
   RtpParameters
 } from 'mediasoup/node/lib/RtpParameters';
-import { Transport } from 'mediasoup/node/lib/Transport';
+import { Transport, TransportListenIp } from 'mediasoup/node/lib/Transport';
 import { DtlsParameters, IceCandidate, IceParameters } from 'mediasoup/node/lib/WebRtcTransport';
+import { WorkerLogLevel } from 'mediasoup/node/lib/Worker';
 import { Server } from 'socket.io';
 import { createConsumer } from './utils/createConsumer';
-import { createWebrtcTransport } from './utils/createWebrtcTransport';
 import { createRouter } from './utils/createRouter';
+import { createWebrtcTransport } from './utils/createWebrtcTransport';
 
 let mediasoupRouter: Router;
 let producerTransport: Transport;
 let producer: Producer;
 
-export const createMediasoupRouter = async (server: http.Server) => {
+type StaticOrigin = boolean | string | RegExp | (boolean | string | RegExp)[];
+
+type CustomOrigin = (requestOrigin: string | undefined, callback: (err: Error | null, origin?: StaticOrigin) => void) => void;
+
+export type MediasoupRouterOptions = {
+  allowedCorsOrigin?: StaticOrigin | CustomOrigin | undefined,
+  logLevel?: WorkerLogLevel | undefined,
+  rtcMinPort?: number | undefined,
+  rtcMaxPort?: number | undefined,
+  maxIncomeBitrate?: number | undefined,
+  initialAvailableOutgoingBitrate?: number | undefined,
+  listenIps?: TransportListenIp[] | undefined
+}
+
+export const createMediasoupRouter = async (server: http.Server, options: MediasoupRouterOptions) => {
   try {
-    mediasoupRouter = await createRouter();
+    mediasoupRouter = await createRouter(options);
   } catch (error) {
     throw error;
   }
   const io = new Server(server, {
     cors: {
-      origin: ['http://localhost:3000', 'http://localhost:3001', 'http://127.0.0.1:8080'], // just for testing purposes
+      origin: options.allowedCorsOrigin,
       methods: ['GET', 'POST'],
     },
   });
@@ -59,7 +74,7 @@ export const createMediasoupRouter = async (server: http.Server) => {
     ) => {
       try {
         const { params, transport } = await createWebrtcTransport(
-          mediasoupRouter,
+          mediasoupRouter, options
         );
 
         producerTransport = transport;
@@ -104,7 +119,7 @@ export const createMediasoupRouter = async (server: http.Server) => {
     ) => {
       try {
         const { params, transport } = await createWebrtcTransport(
-          mediasoupRouter,
+          mediasoupRouter, options
         );
 
         consumerTransport = transport;
