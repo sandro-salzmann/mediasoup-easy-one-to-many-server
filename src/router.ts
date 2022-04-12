@@ -97,7 +97,7 @@ export const createMediasoupRouter = async (server: http.Server, options: Medias
     ) => {
       producer = await producerTransport.produce(event);
       callback(producer.id);
-      io.emit('newProducer'); // broadcast to all that there's a new producer
+      io.of('/mediasoup').emit('newProducer'); // broadcast to all that there's a new producer
     };
     socket.on('createProducerTransport', onCreateProducerTransport);
     socket.on('connectProducerTransport', onConnectProducerTransport);
