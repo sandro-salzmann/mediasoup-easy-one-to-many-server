@@ -19,7 +19,6 @@ You just need to call `createMediasoupRouter` with a `http.Server` to setup the 
 ```ts
 import express from 'express';
 import http from 'http';
-import fs from "fs"
 import { createMediasoupRouter } from "mediasoup-easy-one-to-many-server"
 const app = express();
 
@@ -37,8 +36,8 @@ createMediasoupRouter(server, {
   rtcMaxPort: 10500,
 })
 
-server.listen(3014, () => {
-  console.log('listening on *:3014');
+server.listen(8080, () => {
+  console.log('listening on *:8080');
 });
 ```
 
