@@ -50,7 +50,7 @@ Use `DEBUG=mediasoup:* node ...` to see mediasoup logs.
 
 ### createMediasoupRouter(server: http.Server, options: MediasoupRouterOptions)
 
-Creates and starts a mediasoup router for video forwarding. `server` is needed for internal communication with the [producer](https://github.com/sandro-salzmann/mediasoup-easy-one-to-many-consumer-js) and the [consumers](https://github.com/sandro-salzmann/mediasoup-easy-one-to-many-producer-js).
+Creates and starts a mediasoup router for video forwarding. `server` is needed for internal communication with the [producer](https://github.com/sandro-salzmann/mediasoup-easy-one-to-many-producer-js) and the [consumers](https://github.com/sandro-salzmann/mediasoup-easy-one-to-many-consumer-js).
 
 **MediasoupRouterOptions**
 
